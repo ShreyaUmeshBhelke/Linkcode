@@ -5,34 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-Do List</title>
     <link rel="stylesheet" href="style.css"> 
-
   </head>
 <body>
     <h2>To-Do List</h2>
     <input id="taskInput" type="text" placeholder="Enter a task..." />
     <button onclick="addTask()">Add Task</button>
-
     <ol id="taskList"></ol> 
-
     <script>
         function addTask() {
             const input = document.getElementById("taskInput");
             const list = document.getElementById("taskList");
 
-            if (!input.value.trim()) {
-                alert("Please enter a task!");
+            if (!input.value.trim()) 
+            {     alert("Please enter a task!");
                 return;
             }
 
             const newLi = document.createElement("li");
-
             newLi.innerHTML = `
                 <span class="task-text">${input.value}</span>
                 <button onclick="editTask(this)">Edit</button>
                 <button onclick="deleteTask(this)">Delete</button>
-            `;
 
-            list.appendChild(newLi);
+             list.appendChild(newLi);
             input.value = ""; 
         }
 
@@ -44,7 +39,7 @@
             const li = button.parentElement;
             const taskText = li.querySelector(".task-text");
 
-            // for editing
+            // edit button
             const editInput = document.createElement("input");
             editInput.type = "text";
             editInput.value = taskText.innerText;
