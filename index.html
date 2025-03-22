@@ -27,9 +27,8 @@
                 <span class="task-text">${input.value}</span>
                 <button onclick="editTask(this)">Edit</button>
                 <button onclick="deleteTask(this)">Delete</button>
-            `;  // ✅ Closing backtick was missing
-
-            list.appendChild(newLi);  // ✅ Moved outside template string
+            `; 
+            list.appendChild(newLi);  
             input.value = "";  
         }
 
