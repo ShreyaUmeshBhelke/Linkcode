@@ -10,30 +10,37 @@
     <h2>To-Do List</h2>
     <input id="taskInput" type="text" placeholder="Enter a task..." />
     <button onclick="addTask()">Add Task</button>
+
     <ol id="taskList"></ol> 
-    
+
     <script>
+        document.addEventListener("DOMContentLoaded", loadTasks);
+
         function addTask() {
             const input = document.getElementById("taskInput");
             const list = document.getElementById("taskList");
+            const taskText = input.value.trim();
 
-            if (!input.value.trim()) {
+            if (!taskText) {
                 alert("Please enter a task!");
                 return;
             }
 
             const newLi = document.createElement("li");
             newLi.innerHTML = `
-                <span class="task-text">${input.value}</span>
+                <span class="task-text">${taskText}</span>
                 <button onclick="editTask(this)">Edit</button>
                 <button onclick="deleteTask(this)">Delete</button>
-            `; 
-            list.appendChild(newLi);  
-            input.value = "";  
+            `;
+
+            list.appendChild(newLi);
+            saveTasks();
+            input.value = ""; 
         }
 
         function deleteTask(button) {
             button.parentElement.remove();
+            saveTasks();
         }
 
         function editTask(button) {
@@ -48,13 +55,42 @@
             const saveButton = document.createElement("button");
             saveButton.innerText = "Save";
             saveButton.onclick = function () {
-                taskText.innerText = editInput.value;
+                const newText = editInput.value.trim();
+                if (!newText) {
+                    alert("Task cannot be empty!");
+                    return;
+                }
+                taskText.innerText = newText;
                 li.replaceChild(taskText, editInput);
                 li.replaceChild(button, saveButton);
+                saveTasks();
             };
 
             li.replaceChild(editInput, taskText);
             li.replaceChild(saveButton, button);
+        }
+
+        function saveTasks() {
+            const tasks = [];
+            document.querySelectorAll("#taskList li .task-text").forEach(task => {
+                tasks.push(task.innerText);
+            });
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+        }
+
+        function loadTasks() {
+            const list = document.getElementById("taskList");
+            const savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+            savedTasks.forEach(taskText => {
+                const newLi = document.createElement("li");
+                newLi.innerHTML = `
+                    <span class="task-text">${taskText}</span>
+                    <button onclick="editTask(this)">Edit</button>
+                    <button onclick="deleteTask(this)">Delete</button>
+                `;
+                list.appendChild(newLi);
+            });
         }
     </script>
 </body>
